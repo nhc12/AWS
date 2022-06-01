@@ -99,6 +99,32 @@ def recommend_portfolio(intent_request):
 
         ### YOUR DATA VALIDATION CODE STARTS HERE ###
 
+        # Gets all the slots
+        slots = get_slots(intent_request)
+        
+        # Validates user's input using the validate_data function
+        validation_result = validate_data(age, investment_amount,intent_request)
+        
+        # If the data provided by the user is not valid,
+        # the elicitSlot dialog action is used to re-prompt for the first violation detected.
+        if not validation_result["isValid"]:
+            slots[validation_result["violatedSlot"]] = None  # Cleans invalid slot
+        
+        # Returns an elicitSlot dialog to request new data for the invalid slot
+        return elicit_slot(
+            intent_request["sessionAttributes"],
+            intent_request["currentIntent"]["name"],
+            slots,
+            validation_result["violatedSlot"],
+            validation_result["message"],
+        )
+
+        # Fetch current session attributes
+        output_session_attributes = intent_request["sessionAttributes"]
+
+        # Once all slots are valid, a delegate dialog is returned to Lex to choose the next course of action.
+        return delegate(output_session_attributes, get_slots(intent_request))
+
         ### YOUR DATA VALIDATION CODE ENDS HERE ###
 
         # Fetch current session attibutes
