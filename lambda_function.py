@@ -26,6 +26,7 @@ def build_validation_result(is_valid, violated_slot, message_content):
         "message": {"contentType": "PlainText", "content": message_content},
     }
 
+def get_investment_recommendation(), validate_data()
 
 ### Dialog Actions Helper Functions ###
 def get_slots(intent_request):
@@ -47,7 +48,7 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message)
             "intentName": intent_name,
             "slots": slots,
             "slotToElicit": slot_to_elicit,
-            "message": message,
+            "message": message
         },
     }
 
@@ -111,13 +112,13 @@ def recommend_portfolio(intent_request):
             slots[validation_result["violatedSlot"]] = None  # Cleans invalid slot
         
         # Returns an elicitSlot dialog to request new data for the invalid slot
-        return elicit_slot(
-            intent_request["sessionAttributes"],
-            intent_request["currentIntent"]["name"],
-            slots,
-            validation_result["violatedSlot"],
-            validation_result["message"],
-        )
+            return elicit_slot(
+                intent_request["sessionAttributes"],
+                intent_request["currentIntent"]["name"],
+                slots,
+                validation_result["violatedSlot"],
+                validation_result["message"],
+            )
 
         # Fetch current session attributes
         output_session_attributes = intent_request["sessionAttributes"]
@@ -128,14 +129,34 @@ def recommend_portfolio(intent_request):
         ### YOUR DATA VALIDATION CODE ENDS HERE ###
 
         # Fetch current session attibutes
-        output_session_attributes = intent_request["sessionAttributes"]
+    initial_recommendation = get_investment_recommendation(risk_level)
 
-        return delegate(output_session_attributes, get_slots(intent_request))
+        
 
     # Get the initial investment recommendation
 
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
 
+def get_investment_recommendation(risk_level):
+   """
+   Returns an initial investment recommendation based on the risk profile.
+   """
+   risk_levels = {
+       --INSERT YOUR CODE HERE--
+   }
+       return risk_levels[risk_level.lower()]
+   
+   def validate_data(age, investment_amount, intent_request):
+   """
+   Validates the data provided by the user.
+   """
+   # Validate the retirement age based on the user's current age.
+   # An retirement age of 65 years is considered by default.
+     --INSERT CODE HERE--
+   # Validate the investment amount, it should be >= 5000
+      -INSERT CODE HERE--
+       return build_validation_result(True, None, None)
+    
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE ENDS HERE ###
 
     # Return a message with the initial recommendation based on the risk level.
