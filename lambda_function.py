@@ -3,6 +3,15 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 ### Functionality Helper Functions ###
+def parse_float(n):
+    """
+    Securely converts a non-integer value to integer.
+    """
+    try:
+        return float(n)
+    except ValueError:
+        return float("nan")
+
 def parse_int(n):
     """
     Securely converts a non-integer value to integer.
@@ -26,7 +35,7 @@ def build_validation_result(is_valid, violated_slot, message_content):
         "message": {"contentType": "PlainText", "content": message_content},
     }
 
-def get_investment_recommendation(), validate_data()
+## def get_investment_recommendation(), validate_data()
 
 ### Dialog Actions Helper Functions ###
 def get_slots(intent_request):
@@ -82,6 +91,52 @@ def close(session_attributes, fulfillment_state, message):
 
 
 ### Intents Handlers ###
+    # Get the initial investment recommendation
+
+    ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
+
+def get_investment_recommendation(risk_level):
+    """
+   Returns an initial investment recommendation based on the risk profile.
+    """
+    risk_levels = {
+        "none": "100% bonds (AGG), 0% equities (SPY)",
+        "low": "60% bonds (AGG), 40% equities (SPY)",
+        "medium": "40% bonds (AGG), 60% equities (SPY)",
+        "high": "20% bonds (AGG), 80% equities (SPY)",
+    }
+
+    return risk_levels[risk_level.lower()]
+   
+def validate_data(age, investment_amount, intent_request):
+    """
+    Validates the data provided by the user.
+    """
+   # Validate the retirement age based on the user's current age.
+   # An retirement age of 65 years is considered by default.
+    if age is not None:
+        age = parse_int(age)  
+        # Since parameters are strings it's important to cast values    
+        if age < 65:
+            return build_validation_result(
+                False,
+                "age",
+                "You should be at least 65 years old to use this service, "
+            )
+   # Validate the investment amount, it should be >= 5000
+    if investment_amount is not None:
+        investment_amount = parse_float(
+            investment_amount
+        )  # Since parameters are strings it's important to cast values
+        if investment_amount <= 4999:
+            return build_validation_result(
+                False,
+                "investmentAmount",
+                "The amount should be higher than 5000 dollars , "
+                "please provide a correct amount in dollars to invest.",
+            )
+    return build_validation_result(True, None, None)
+    
 def recommend_portfolio(intent_request):
     """
     Performs dialog management and fulfillment for recommending a portfolio.
@@ -131,32 +186,6 @@ def recommend_portfolio(intent_request):
         # Fetch current session attibutes
     initial_recommendation = get_investment_recommendation(risk_level)
 
-        
-
-    # Get the initial investment recommendation
-
-    ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
-
-def get_investment_recommendation(risk_level):
-   """
-   Returns an initial investment recommendation based on the risk profile.
-   """
-   risk_levels = {
-       --INSERT YOUR CODE HERE--
-   }
-       return risk_levels[risk_level.lower()]
-   
-   def validate_data(age, investment_amount, intent_request):
-   """
-   Validates the data provided by the user.
-   """
-   # Validate the retirement age based on the user's current age.
-   # An retirement age of 65 years is considered by default.
-     --INSERT CODE HERE--
-   # Validate the investment amount, it should be >= 5000
-      -INSERT CODE HERE--
-       return build_validation_result(True, None, None)
-    
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE ENDS HERE ###
 
     # Return a message with the initial recommendation based on the risk level.
@@ -172,6 +201,7 @@ def get_investment_recommendation(risk_level):
             ),
         },
     )
+    
 
 
 ### Intents Dispatcher ###
